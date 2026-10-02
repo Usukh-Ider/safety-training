@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR код хэвлэх</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root { --indigo-900:#160F57; --indigo-700:#2B1CA3; --green:#1E9E3E; --yellow:#F2C200; --red:#D3202F; --ink:#17143A; --soft:#5E5C7A; }
+  body { margin:0; font-family:"Inter",system-ui,Arial,sans-serif; background:#F5F5FA; color:var(--ink); }
+  .tools { max-width:640px; margin:24px auto; padding:0 20px; }
+  .tools label { font-weight:600; font-size:14px; display:block; margin-bottom:6px; }
+  .tools input { width:100%; box-sizing:border-box; padding:12px; font:inherit; border:1px solid #E1E0EC; border-radius:10px; }
+  .tools button { margin-top:12px; padding:12px 22px; border-radius:10px; border:0; background:var(--indigo-700); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+  .sheet { max-width:520px; margin:24px auto 40px; background:#fff; border-radius:18px; overflow:hidden; text-align:center; box-shadow:0 10px 30px -12px rgba(22,15,87,.35); }
+  .band { background:var(--indigo-900); color:#fff; padding:26px 28px 22px; position:relative; }
+  .band::after { content:""; position:absolute; left:0; right:0; bottom:0; height:6px;
+    background:linear-gradient(90deg,var(--green) 0 34%,var(--yellow) 34% 67%,var(--red) 67% 100%); }
+  .band .org { font-size:14px; color:#CFCCF2; font-weight:600; }
+  .band h1 { margin:6px 0 0; font-size:28px; line-height:1.15; font-weight:800; }
+  .body { padding:26px 28px 30px; }
+  .body p { margin:0 0 20px; color:var(--soft); }
+  #qr { display:inline-block; padding:12px; background:#fff; }
+  #qr img, #qr canvas { width:300px !important; height:300px !important; }
+  .url { margin-top:12px; font-size:13px; color:var(--soft); word-break:break-all; }
+  @media print { body { background:#fff; } .tools { display:none; } .sheet { margin-top:0; box-shadow:none; }
+    .band, .band::after { -webkit-print-color-adjust:exact; print-color-adjust:exact; } }
+</style>
+</head>
+<body>
+  <div class="tools">
+    <label for="u">Сайтын хаяг</label>
+    <input id="u">
+    <button type="button" onclick="window.print()">Хэвлэх</button>
+  </div>
+  <div class="sheet">
+    <div class="band">
+      <div class="org">Дорноговь Цахилгаан Түгээх Сүлжээ</div>
+      <h1>Аюулгүй байдлын сургалт</h1>
+    </div>
+    <div class="body">
+      <p>Утасныхаа камераар уншуулж сургалтын бичлэгүүдийг үзнэ үү.</p>
+      <div id="qr"></div>
+      <div class="url" id="urlText"></div>
+    </div>
+  </div>
+<script>
+  const DEFAULT_URL = "https://usukh-ider.github.io/safety-training/";
+  const input = document.getElementById("u");
+  input.value = location.protocol.startsWith("http") ? location.href.replace(/qr\.html.*$/, "") : DEFAULT_URL;
+  function draw() {
+    document.getElementById("qr").innerHTML = "";
+    document.getElementById("urlText").textContent = input.value;
+    if (window.QRCode && input.value) new QRCode("qr", { text: input.value, width: 600, height: 600, correctLevel: QRCode.CorrectLevel.M });
+  }
+  input.addEventListener("input", draw);
+  draw();
+</script>
+</body>
+</html>

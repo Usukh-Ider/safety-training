@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F1470">
+<title>Аюулгүй байдлын анхан шатны сургалт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   ӨНГӨ — БЗӨБЦТС ТӨХК-ийн логоны өнгө
+   ========================================================= */
+:root {
+  --indigo-900: #160F57;
+  --indigo-700: #2B1CA3;   /* логоны ягаан цагираг */
+  --indigo-600: #3B27D1;
+  --green: #1E9E3E;
+  --yellow: #F2C200;
+  --red: #D3202F;
+  --paper: #F5F5FA;
+  --card: #FFFFFF;
+  --ink: #17143A;
+  --ink-soft: #5E5C7A;
+  --line: #E1E0EC;
+  --radius: 14px;
+  box-sizing: border-box;
+}
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: 12px; }
+body {
+  margin: 0; min-height: 100vh;
+  background: var(--paper); color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img, video, iframe { max-width: 100%; display: block; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--indigo-600); outline-offset: 3px; border-radius: 8px; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------- Толгой хэсэг ---------- */
+.masthead {
+  background: var(--indigo-900);
+  background-image:
+    radial-gradient(900px 300px at 100% -20%, rgba(59,39,209,.55), transparent 70%),
+    radial-gradient(500px 220px at 0% 120%, rgba(43,28,163,.6), transparent 70%);
+  color: #fff;
+  padding-top: env(safe-area-inset-top, 0px);
+  position: relative;
+}
+/* логоны гурван өнгийн зураас */
+.masthead::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px;
+  background: linear-gradient(90deg, var(--green) 0 34%, var(--yellow) 34% 67%, var(--red) 67% 100%);
+}
+.top { display: flex; align-items: center; gap: 14px; padding: 18px 0; }
+.logo {
+  width: 56px; height: 56px; flex: none; border-radius: 50%;
+  background: #fff; display: grid; place-items: center; overflow: hidden;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.18);
+}
+.logo img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+.logo svg { width: 32px; height: 32px; }
+.org { font-weight: 700; font-size: 17px; line-height: 1.25; letter-spacing: -0.005em; }
+.org small { display: block; margin-top: 2px; font-weight: 500; font-size: 13.5px; color: #B9B5E8; }
+
+.hero { padding: 26px 0 44px; }
+.hero h1 {
+  margin: 0; max-width: 20ch;
+  font-size: clamp(28px, 6.2vw, 44px); line-height: 1.1;
+  font-weight: 800; letter-spacing: -0.025em;
+}
+.hero p { margin: 12px 0 0; max-width: 52ch; color: #CFCCF2; font-size: 16px; }
+.progress { margin-top: 24px; max-width: 420px; }
+.segs { display: flex; gap: 5px; }
+.segs i { flex: 1; height: 6px; border-radius: 99px; background: rgba(255,255,255,.18); transition: background .3s ease; }
+.segs i.on { background: var(--green); }
+.progress-text { margin-top: 8px; font-size: 14px; font-weight: 600; color: #E6E4FA; }
+
+/* ---------- Үндсэн хэсэг ---------- */
+.main { display: grid; gap: 24px; padding: 28px 0 40px; }
+.main.has-player { grid-template-columns: 1fr; }
+@media (min-width: 900px) {
+  .main.has-player { grid-template-columns: minmax(0, 1.7fr) minmax(320px, 1fr); align-items: start; }
+  .main.has-player .list-col { position: sticky; top: 16px; }
+}
+
+/* ---------- Тоглуулагч ---------- */
+.player[hidden] { display: none; }
+.screen {
+  aspect-ratio: 16 / 9; width: 100%; background: #0B0924;
+  border-radius: var(--radius); overflow: hidden;
+  box-shadow: 0 10px 30px -12px rgba(22,15,87,.45);
+}
+.screen iframe, .screen video { width: 100%; height: 100%; border: 0; }
+.screen .empty { height: 100%; display: grid; place-items: center; text-align: center; color: #B9B5E8; padding: 20px; font-size: 15px; }
+.now { padding: 18px 2px 0; }
+.now .step { font-size: 14px; color: var(--indigo-700); font-weight: 600; }
+.now h2 { margin: 4px 0 8px; font-size: clamp(21px, 4.4vw, 28px); line-height: 1.2; letter-spacing: -0.015em; }
+.now p { margin: 0; color: var(--ink-soft); max-width: 62ch; }
+.nav { display: flex; gap: 10px; margin-top: 20px; max-width: 420px; }
+.nav .btn { flex: 1; }
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--card);
+  padding: 12px 18px; border-radius: 10px; font-weight: 600; font-size: 15px;
+  cursor: pointer; min-height: 46px; transition: background .15s ease, border-color .15s ease;
+}
+.btn:hover:not(:disabled) { border-color: var(--indigo-600); }
+.btn:disabled { opacity: .4; cursor: default; }
+.btn.primary { background: var(--indigo-700); color: #fff; border-color: var(--indigo-700); }
+.btn.primary:hover:not(:disabled) { background: var(--indigo-600); border-color: var(--indigo-600); }
+
+/* ---------- Бичлэгийн жагсаалт ---------- */
+.list-head { display: flex; justify-content: space-between; align-items: baseline; margin: 0 2px 12px; }
+.list-head h3 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
+.list-head span { font-size: 14px; color: var(--ink-soft); }
+.lessons { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.lessons li + li { border-top: 1px solid var(--line); }
+.lesson {
+  width: 100%; display: grid; grid-template-columns: 40px 1fr 20px; gap: 14px; align-items: center;
+  text-align: left; background: none; border: 0; border-left: 4px solid transparent;
+  padding: 16px 16px 16px 14px; cursor: pointer; transition: background .15s ease;
+}
+.lesson:hover { background: #F7F6FD; }
+.num {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 700; font-size: 15px;
+  background: #EFEEF8; color: var(--indigo-700);
+}
+.num svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.lesson .t { font-weight: 600; font-size: 16px; line-height: 1.3; }
+.lesson .d { font-size: 13.5px; color: var(--ink-soft); margin-top: 2px; }
+.chev { width: 18px; height: 18px; fill: none; stroke: #A3A1BD; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+.lesson.watched .num { background: #E3F4E8; color: var(--green); }
+.lesson.current { background: #F1EFFD; border-left-color: var(--indigo-600); }
+.lesson.current .num { background: var(--indigo-700); color: #fff; }
+.lesson.current .chev { stroke: var(--indigo-700); }
+
+.foot { text-align: center; font-size: 13px; color: var(--ink-soft); padding: 4px 0 32px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="wrap">
+    <header class="top">
+      <div class="logo" id="logo"></div>
+      <div class="org" id="org"></div>
+    </header>
+    <section class="hero">
+      <h1 id="title"></h1>
+      <p id="subtitle"></p>
+      <div class="progress">
+        <div class="segs" id="segs" role="presentation"></div>
+        <div class="progress-text" id="progressText"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="main" id="main">
+    <section class="player" id="player" hidden aria-live="polite">
+      <div class="screen" id="screen"></div>
+      <div class="now">
+        <div class="step" id="nowStep"></div>
+        <h2 id="nowTitle"></h2>
+        <p id="nowDesc"></p>
+        <div class="nav">
+          <button class="btn" id="prevBtn" type="button">Өмнөх</button>
+          <button class="btn primary" id="nextBtn" type="button">Дараагийн</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="list-col">
+      <div class="list-head">
+        <h3 id="listTitle">Сургалтын бичлэгүүд</h3>
+        <span id="listCount"></span>
+      </div>
+      <ul class="lessons" id="lessons"></ul>
+    </section>
+  </div>
+
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<script>
+/* =========================================================
+   ТОХИРГОО — зөвхөн энэ хэсгийг засахад хангалттай
+   ---------------------------------------------------------
+   Бичлэг бүрт доорх гурвын аль нэгийг бөглөнө:
+     youtube: "https://youtu.be/XXXX"   (YouTube-д Unlisted/Жагсаалтгүй байршуулсан линк)
+     drive:   "https://drive.google.com/file/d/XXXX/view"  (Anyone with the link эрхтэй)
+     file:    "videos/01.mp4"           (repo-гийн videos хавтас доторх файл, 100MB-аас бага)
+   ========================================================= */
+const CONFIG = {
+  orgName: "Дорноговь Цахилгаан Түгээх Сүлжээ",
+  orgNote: "БЗӨБЦТС ТӨХК · Дорноговь салбар",
+  logo: "logo.png",   // logo.png файлаа index.html-тэй нэг хавтсанд хийнэ
+  title: "Аюулгүй байдлын анхан шатны сургалт",
+  subtitle: "Бичлэгүүдийг дарааллаар нь үзнэ үү. Хүссэн үедээ буцаж орж дахин үзэж болно.",
+  footer: "Асуулт байвал аюулгүй ажиллагааны ажилтандаа хандана уу. · bnedo.mn",
+  videos: [
+    { title: "Ажлын байрны аюулгүй байдлын ерөнхий дүрэм", duration: "5 мин",
+      description: "Ажлын байранд мөрдөх үндсэн дүрэм, хориглох зүйлс.",
+      youtube: "", drive: "", file: "" },
+    { title: "Хувийн хамгаалах хэрэгсэл", duration: "4 мин",
+      description: "Малгай, бээлий, нүдний шил, гутал зэргийг хэзээ, яаж зөв хэрэглэх вэ.",
+      youtube: "", drive: "", file: "" },
+    { title: "Галын аюулгүй байдал", duration: "6 мин",
+      description: "Гал гарвал хийх алхмууд, гал унтраагуур ашиглах, гарцаар гарах.",
+      youtube: "", drive: "", file: "" },
+    { title: "Цахилгааны аюулгүй байдал", duration: "4 мин",
+      description: "Цахилгааны тоног төхөөрөмжтэй аюулгүй ажиллах үндсэн зарчим.",
+      youtube: "", drive: "", file: "" },
+    { title: "Анхны тусламж", duration: "7 мин",
+      description: "Осол гэмтлийн үед үзүүлэх анхны тусламж, хэнд мэдэгдэх вэ.",
+      youtube: "", drive: "", file: "" }
+  ]
+};
+/* ======================== ТОХИРГООНЫ ТӨГСГӨЛ ======================== */
+
+const $ = (id) => document.getElementById(id);
+const BOLT = '<svg viewBox="0 0 48 48" aria-hidden="true"><path d="M27 3 11 27h10l-4 18 20-26H26z" fill="#F2C200"/><path d="M27 3 21 27h5z" fill="#1E9E3E"/><path d="M17 45l4-18h5z" fill="#D3202F"/></svg>';
+const V = CONFIG.videos;
+const STORE_KEY = "watched:" + location.pathname;
+
+function loadWatched() {
+  try { return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || "[]")); }
+  catch (e) { return new Set(); }
+}
+function saveWatched(set) {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify([...set])); } catch (e) {}
+}
+let watched = loadWatched();
+
+function youtubeId(v) {
+  if (!v) return "";
+  const m = v.match(/(?:youtu\.be\/|v=|embed\/|shorts\/|live\/)([\w-]{11})/);
+  return m ? m[1] : (/^[\w-]{11}$/.test(v) ? v : "");
+}
+function driveId(v) {
+  if (!v) return "";
+  const m = v.match(/\/d\/([\w-]+)/) || v.match(/[?&]id=([\w-]+)/);
+  return m ? m[1] : v;
+}
+
+function renderSource(video) {
+  const screen = $("screen");
+  screen.innerHTML = "";
+  const yt = youtubeId(video.youtube);
+  if (yt) {
+    const f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + yt + "?rel=0&playsinline=1";
+    f.allow = "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen";
+    f.allowFullscreen = true; f.title = video.title;
+    screen.appendChild(f); return;
+  }
+  if (video.drive) {
+    const f = document.createElement("iframe");
+    f.src = "https://drive.google.com/file/d/" + driveId(video.drive) + "/preview";
+    f.allow = "autoplay; fullscreen"; f.allowFullscreen = true; f.title = video.title;
+    screen.appendChild(f); return;
+  }
+  if (video.file) {
+    const el = document.createElement("video");
+    el.src = video.file; el.controls = true; el.playsInline = true; el.preload = "metadata";
+    screen.appendChild(el); return;
+  }
+  screen.innerHTML = '<div class="empty">Энэ бичлэг хараахан нэмэгдээгүй байна.<br>Удахгүй орох болно.</div>';
+}
+
+function renderHeader() {
+  document.title = CONFIG.title + " — " + CONFIG.orgName;
+  $("org").innerHTML = "";
+  $("org").append(CONFIG.orgName);
+  const note = document.createElement("small"); note.textContent = CONFIG.orgNote; $("org").append(note);
+  const img = new Image();
+  img.alt = CONFIG.orgName + " лого";
+  img.onload = () => { $("logo").innerHTML = ""; $("logo").append(img); };
+  img.onerror = () => { $("logo").innerHTML = BOLT; };
+  img.src = CONFIG.logo;
+  $("title").textContent = CONFIG.title;
+  $("subtitle").textContent = CONFIG.subtitle;
+  $("foot").textContent = CONFIG.footer;
+  $("listCount").textContent = V.length + " бичлэг";
+}
+
+function renderProgress() {
+  const n = V.filter((_, i) => watched.has(i)).length;
+  const seg = $("segs");
+  if (seg.children.length !== V.length) {
+    seg.innerHTML = "";
+    V.forEach(() => seg.appendChild(document.createElement("i")));
+  }
+  [...seg.children].forEach((el, i) => el.classList.toggle("on", watched.has(i)));
+  $("progressText").textContent = n === V.length && n > 0 ? "Бүгдийг үзсэн" : n + " / " + V.length + " үзсэн";
+}
+
+const chevIcon = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+const checkIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+function renderList(current) {
+  const ul = $("lessons"); ul.innerHTML = "";
+  V.forEach((v, i) => {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "lesson" + (watched.has(i) ? " watched" : "") + (i === current ? " current" : "");
+    if (i === current) b.setAttribute("aria-current", "true");
+    const status = i === current ? "Одоо үзэж байна" : (watched.has(i) ? "Үзсэн" : "");
+    b.innerHTML =
+      '<span class="num">' + (watched.has(i) && i !== current ? checkIcon : (i + 1)) + '</span>' +
+      '<span><span class="t" style="display:block"></span><span class="d" style="display:block"></span></span>' +
+      chevIcon;
+    b.querySelector(".t").textContent = v.title;
+    b.querySelector(".d").textContent = [v.duration, status].filter(Boolean).join(", ");
+    b.addEventListener("click", () => { location.hash = "#" + (i + 1); });
+    li.appendChild(b); ul.appendChild(li);
+  });
+}
+
+function show() {
+  const n = parseInt(location.hash.slice(1), 10);
+  const i = n >= 1 && n <= V.length ? n - 1 : -1;
+  const player = $("player"), main = $("main");
+
+  if (i < 0) {
+    player.hidden = true; main.classList.remove("has-player");
+    $("screen").innerHTML = "";
+    $("listTitle").textContent = "Сургалтын бичлэгүүд";
+    renderList(-1); renderProgress(); return;
+  }
+
+  const v = V[i];
+  watched.add(i); saveWatched(watched);
+  player.hidden = false; main.classList.add("has-player");
+  renderSource(v);
+  $("nowStep").textContent = (i + 1) + "-р бичлэг, нийт " + V.length;
+  $("nowTitle").textContent = v.title;
+  $("nowDesc").textContent = v.description || "";
+  $("prevBtn").disabled = i === 0;
+  $("nextBtn").disabled = i === V.length - 1;
+  $("prevBtn").onclick = () => { location.hash = "#" + i; };
+  $("nextBtn").onclick = () => { location.hash = "#" + (i + 2); };
+  $("listTitle").textContent = "Бусад бичлэгүүд";
+  renderList(i); renderProgress();
+  player.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+}
+
+renderHeader();
+window.addEventListener("hashchange", show);
+show();
+</script>
+</body>
+</html>
